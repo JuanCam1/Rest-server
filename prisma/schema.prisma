@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Folder {
+  id        String    @id @default(cuid())
+  name      String
+  isOpen    Boolean   @default(true)
+  requests  Request[]
+  createdAt String
+  updatedAt String
+}
+
+model Request {
+  id        String          @id @default(cuid())
+  name      String
+  url       String
+  method    Method
+  headers   RequestHeader[]
+  body      String
+  folder    Folder          @relation(fields: [folderId], references: [id])
+  folderId  String
+  createdAt String
+  updatedAt String
+}
+
+enum Method {
+  GET
+  POST
+  PUT
+  DELETE
+  PATCH
+}
+
+model RequestHeader {
+  id        String  @id @default(cuid())
+  key       String
+  value     String
+  request   Request @relation(fields: [requestId], references: [id])
+  requestId String
+  createdAt String
+  updatedAt String
+}
+
+model Setting {
+  id        String @id @default(cuid())
+  theme     Theme  @default(light)
+  createdAt String
+  updatedAt String
+}
+
+enum Theme {
+  light
+  dark
+  system
+}
