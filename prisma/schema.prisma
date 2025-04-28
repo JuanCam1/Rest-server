@@ -23,7 +23,7 @@ model Request {
   url       String
   method    Method
   headers   RequestHeader[]
-  body      String
+  body      String?
   folder    Folder          @relation(fields: [folderId], references: [id])
   folderId  String
   createdAt String
